@@ -1,6 +1,5 @@
 ---
-title: "Untargeted characterization of Amazonian barks extracts plants by Liquid and Gas Chromatography - Mass Spectrometry"
-subtitle: "Gas Chromatography - Mass Spectrometry (GC-MS) data analysis"
+title: "Untargeted characterization of Amazonian barks extracts plants by Liquid and Gas Chromatography - Mass Spectrometry | Gas Chromatography - Mass Spectrometry (GC-MS) data analysis"
 author: "Jefferson Pastuña"
 date: "2023-08-08"
 output:
@@ -10,8 +9,10 @@ output:
 ---
 
 ```{r setup, include=FALSE}
+
 knitr::opts_chunk$set(echo = TRUE)
 usethis::git_vaccinate()
+
 ```
 
 ## Introduction
@@ -53,7 +54,7 @@ library(notame)
 ```{r echo=TRUE, message=TRUE, warning=FALSE, error=FALSE}
 
 # Main path
-ppath <- "G:/Arajuno_Stem_Bark/"
+ppath <- "F:/Jefferson-Pastuna/Arajuno_Stem_Bark/"
 # Log system
 init_log(log_file = paste0(ppath, "Result/GCMS/GCMS_log.txt"))
 
@@ -218,7 +219,7 @@ no_qc_pca + no_qc_bp
 
 The next step is feature clustering. This step helps us reduce the number of features of the same molecule that were split due to 70 eV EI ionization behavior.
 
-```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
 clustered <- cluster_features(corrected_no_qc,
                               rt_window = 1/600,
@@ -287,7 +288,7 @@ save(imputed, file = paste0(ppath, "Result/GCMS/Notame_GCMS_output.RData"))
 
 ```
 
-# Second PCA and loading plot
+# PCA plots
 
 Droping flagged features
 
@@ -343,7 +344,7 @@ Plotting loading results.
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
 loadings <- ei_pca$rotation %>%           # Extract loadings
-  data.frame(Feature_name = rownames(.))  # New column with feat name
+  data.frame(Feature_ID = rownames(.))  # New column with feat name
 
 ```
 
@@ -351,7 +352,7 @@ Creating an artificial table with Feature name and Compound column.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
-# Load a metabolite mane table
+# Load a metabolite name table
 metab_name <- readxl::read_excel("Data/GCMS_Metabolites.xlsx", 5)
 # Creating a new small table of the annotated compounds
 ei_compouds <- left_join(metab_name, loadings)
@@ -361,9 +362,9 @@ ggplot(loadings, aes(PC1, PC2)) +
   theme_classic() + 
   geom_point(data = ei_compouds, size = 1) +
   ggrepel::geom_label_repel(data = ei_compouds,
-                            aes(label = Compound),
+                            aes(label = Metabolite_name),
                             box.padding = 0.8,
-                            label.padding = 0.27,
+                            label.padding = 0.3,
                             label.r = 0.3,
                             cex = 3) +
   guides(x=guide_axis(title = "PC1 (45.52 %)"),
@@ -371,6 +372,144 @@ ggplot(loadings, aes(PC1, PC2)) +
   ggsci::scale_color_aaas()
 # Save plot
 ggsave('Result/GCMS/GCMS_Loadings.png', width = 5, height = 4, device='png', dpi="print")
+
+```
+
+# Heat map plot
+
+ComplexHeatmap package and dependency installation.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
+
+# ComplexHeatmap package installation
+#if (!requireNamespace("BiocManager", quietly=TRUE))
+#    install.packages("BiocManager")
+#BiocManager::install("ComplexHeatmap")
+library(ComplexHeatmap)
+
+# ColorRamp2 package installation
+#if (!requireNamespace("devtools", quietly = TRUE)) {
+#  install.packages("devtools")
+#}
+#devtools::install_github("jokergoo/colorRamp2")
+library(colorRamp2)
+
+# Cowplot package installation
+#install.packages("cowplot")
+library(cowplot)
+
+```
+
+Extracting and loaded of identified metabolites abundance.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
+
+# Metabolite name table without internal standard
+metab_name_hm <- readxl::read_excel("Data/GCMS_Metabolites.xlsx", 6)
+# Add identified metabolite to "notame" output
+add_met <- join_fData(no_flag, metab_name_hm)
+# Extracting identified metabolite data
+raw_hm <- add_met[!is.na(add_met@featureData@data$Metabolite_name),]
+# Extracting feature height table
+hm_height <- exprs(raw_hm)
+# Extracting sample information
+hm_pdata <- raw_hm@phenoData@data
+# Extracting feature information
+hm_fdata <- raw_hm@featureData@data
+
+```
+
+Scaling, row and top heatmap anotation.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
+
+set.seed(1540)
+# Logarithmic scale
+hm_scl <- log10(hm_height)
+rownames(hm_scl) <- hm_fdata$Metabolite_name
+colnames(hm_scl) <- hm_pdata$Group
+# Metabolite class color
+cols_metclass <- c("Benzenoids" = "#800000FF",
+                   "Organoheterocyclic compounds" = "#8A9045FF",
+                   "Organohalogen compounds" = "#FFA319FF",
+                   "Internal Standard" = "#767676FF")
+# Add row anotation to HeatMap
+hm_row_ann <- rowAnnotation(`Class` = hm_fdata$Superclass,
+                            col = list(`Class` = cols_metclass),
+                            show_annotation_name = T,
+                            show_legend=F)
+# Species color
+cols_species <- c("A. rigidum" = "#e6550d",
+                 "C. guianensis" = "#91cf60",
+                 "M. laevis" = "#33d2ff",
+                 "P. sagotianum" = "#d957f8")
+# Add top anotation to HeatMap
+top_info_ann <- HeatmapAnnotation(`Species` = hm_pdata$Species,
+                                  col = list(`Species` = cols_species),
+                                  show_annotation_name = T,
+                                  show_legend=F, 
+                                  border = TRUE)
+# Color scale
+mycol <- colorRamp2(c(1.5, 2.75, 4),
+                    c("blue", "white", "red"))
+# Heatmap matrix plotting
+hm_plot <- Heatmap(hm_scl,
+        col = mycol,
+        border_gp = grid::gpar(col = "black", lty = 0.05),
+        rect_gp = grid::gpar(col = "black", lwd = 0.75),
+        clustering_distance_columns = "euclidean",
+        clustering_method_columns = "complete",
+        top_annotation = top_info_ann,
+        right_annotation = hm_row_ann,
+        show_heatmap_legend = F,
+        row_km = 3, column_km = 2)
+hm_plot
+
+```
+
+Adding legends to heatmap.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
+
+# Color scale legend
+lgd1 <- Legend(col_fun = mycol,
+               title = "log10 abundance",
+               at = seq(4),
+               direction = "horizontal" )
+# Plants species legend
+lgd2 <- Legend(labels = gt_render(c("*A. rigidum*",
+                                    "*C. guianensis*",
+                                    "*M. laevis*",
+                                    "*P. sagotianum*")),
+               legend_gp = gpar(fill = cols_species),
+               title = "Plants species", ncol = 1)
+# Metabolite class Legend
+lgd3 <- Legend(labels = c(unique(hm_fdata$Superclass)) ,
+               legend_gp = gpar(fill = cols_metclass), 
+               title = "Metabolite Class", ncol = 1)
+
+```
+
+ComplexHeatmap plot
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
+
+set.seed(1540)
+# Converting to ggplot
+gg_heatmap <- grid.grabExpr(draw(hm_plot))
+gg_heatmap <- ggpubr::as_ggplot(gg_heatmap)
+# Legends
+all_legends <- packLegend(lgd1, lgd2, lgd3, direction = "horizontal")
+gg_legend <- grid.grabExpr(draw(all_legends))
+gg_legend_fn <- ggpubr::as_ggplot(gg_legend)
+# Heatmap plot
+gcms_hm <- plot_grid(gg_legend_fn,
+          gg_heatmap, ncol = 1,
+          rel_heights = c(0.195, 0.88))
+gcms_hm
+# Save heatmap plot
+ggsave(filename = "Result/GCMS/GCMS_Heatmap.jpeg", plot = gcms_hm,
+      width = 5, height = 3, units = "in", dpi = 300, scale = 1.7)
 
 ```
 
