@@ -36,7 +36,8 @@ As a first step for the analysis,"notame" package and other dependency packages 
 #  install.packages("devtools")
 #}
 #devtools::install_github("antonvsdata/notame")
-
+# Notame library call
+library(notame)
 # Dependency packages installation
 install_dependencies
 
@@ -44,19 +45,12 @@ install_dependencies
 
 Then, a main path and a log system was added to have a record of each process executed.
 
-```{r echo=TRUE, message=TRUE, warning=FALSE, error=FALSE, results='hide'}
-
-# Notame library call
-library(notame)
-
-```
-
 ```{r echo=TRUE, message=TRUE, warning=FALSE, error=FALSE}
 
 # Main path
-ppath <- "F:/Jefferson-Pastuna/Arajuno_Stem_Bark/"
+ppath <- "C:/Users/F4ss0/Documents/Ikiam21062022/Arajuno_Stem_Bark/"
 # Log system
-init_log(log_file = paste0(ppath, "Result/LCMS/LCMS_log.txt"))
+init_log(log_file = paste0(ppath, "Result/LCMS/LCMS_EEUU_log.txt"))
 
 ```
 
@@ -125,18 +119,18 @@ Then, features with low detection rate are first flagged and then could be remov
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
 
 # Low detection rate
-mode <- flag_detection(mode, qc_limit = 0.70, group_limit = 0)
+mode <- flag_detection(mode, qc_limit = 3/4, group_limit = 0)
 
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
 # Some statistics after low detection algorithm
-visualizations(mode, prefix = paste0(ppath, "Figure/LCMS/", "Low_Detection"))
+visualizations(mode, prefix = paste0(ppath, "Figure/LCMS/", "Low_Detection_EEUU"))
 
 ```
 
-With these values, features which that were not detected in the 80% of the QC injections and 75% of sample groups will be flagged as low detection rate.
+With these values, features which that were not detected in the 75% of the QC injections and 0% of sample groups will be flagged as low detection rate.
 
 The next step for preprocessing correspond to drift correction. The drift correction can be applied by smoothed cubic spline regression.
 
@@ -185,7 +179,7 @@ corrected_no_blank <- corrected_no_blank[, corrected_no_blank$Group != "Blank"]
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
 # Some statistics after low detection algorithm
-visualizations(corrected_no_blank, prefix = paste0(ppath, "Figure/LCMS/", "No_Blank"))
+visualizations(corrected_no_blank, prefix = paste0(ppath, "Figure/LCMS/", "No_Blank_EEUU"))
 
 ```
 
