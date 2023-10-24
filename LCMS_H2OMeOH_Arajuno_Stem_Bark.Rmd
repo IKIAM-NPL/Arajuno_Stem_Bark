@@ -141,7 +141,7 @@ The next step for preprocessing correspond to drift correction. The drift correc
 # Drift correction
 corrected <- correct_drift(mode)
 # Flag low quality features
-corrected <- flag_quality(corrected) #, condition = "RSD_r < 0.3 & D_ratio_r < 0.6")
+corrected <- flag_quality(corrected)
 
 ```
 
