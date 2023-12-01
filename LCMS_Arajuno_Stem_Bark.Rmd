@@ -58,7 +58,7 @@ Next, the MZmine suitable feature list was imported.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
 
-data <- read_from_excel(file = "Data/LCMS_to_R.xlsx", sheet = 5, 
+data <- read_from_excel(file = "Data/LCMS_to_R.xlsx", sheet = 4, 
                         corner_row = 5, corner_column = "J", 
                         split_by = c("Column", "Ion Mode"))
 
@@ -178,7 +178,7 @@ corrected_no_blank <- corrected_no_blank[, corrected_no_blank$Group != "PB"]
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
-# Some statistics after low detection algorithm
+# Some statistics after feature blank detection algorithm
 visualizations(corrected_no_blank, prefix = paste0(ppath, "Figure/LCMS/", "No_Blank"))
 
 ```
@@ -222,7 +222,7 @@ The next step imputes the data.
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
 
 # To clean data
-set.seed(201)
+set.seed(123)
 imputed <- impute_rf(compressed)
 
 ```
@@ -261,6 +261,7 @@ Droping flagged features
 
 # Extract clean data
 no_flag <- drop_flagged(imputed)
+
 # Extracting feature height table
 peak_height <- exprs(no_flag)
 # Extracting samples information
@@ -298,8 +299,8 @@ scores <- neg_pca$x %>%                   # Get PC coordinates
 ggplot(scores,
        aes(PC1, PC2, shape = Species, color = Species)) +
   geom_point(size = 3) +
-  guides(x=guide_axis(title = "PC1 (28.98 %)"),
-         y=guide_axis(title = "PC2 (18.20 %)")) +
+  guides(x=guide_axis(title = "PC1 (28.73 %)"),
+         y=guide_axis(title = "PC2 (18.10 %)")) +
   theme_classic()
 # Save plot
 ggsave("Result/LCMS/LCMS_PCA.png", width = 5, height = 4, device='png', dpi="print")
@@ -338,8 +339,8 @@ ggplot(loadings, aes(PC1, PC2)) +
                             label.padding = 0.3,
                             label.r = 0.3,
                             cex = 3) +
-  guides(x=guide_axis(title = "PC1 (28.98 %)"),
-         y=guide_axis(title = "PC2 (18.20 %)")) +
+  guides(x=guide_axis(title = "PC1 (28.73 %)"),
+         y=guide_axis(title = "PC2 (18.10 %)")) +
   ggsci::scale_color_aaas()
 # Save plot
 ggsave('Result/LCMS/LCMS_Loadings.png', width = 5, height = 4, device='png', dpi="print")
