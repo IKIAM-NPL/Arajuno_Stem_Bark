@@ -1,5 +1,5 @@
 ---
-title: "Untargeted characterization of Amazonian barks extracts plants by Liquid and Gas Chromatography - Mass Spectrometry | Liquid Chromatography - Mass Spectrometry (LC-MS) data analysis"
+title: "Untargeted characterization of Amazonian barks extracts plants by Liquid and Gas Chromatography - Mass Spectrometry | Liquid Chromatography - Mass Spectrometry (LC-MS) data analysis 1"
 author: "Jefferson Pastuña"
 date: "2023-08-31"
 output:
@@ -58,7 +58,7 @@ Next, the MZmine suitable feature list was imported.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
 
-data <- read_from_excel(file = "Data/LCMS_to_R.xlsx", sheet = 4, 
+data <- read_from_excel(file = "Data/LCMS_to_R.xlsx", sheet = 5, 
                         corner_row = 5, corner_column = "J", 
                         split_by = c("Column", "Ion Mode"))
 
@@ -291,7 +291,7 @@ Plotting PCA results.
 # Library to left_join use
 library(dplyr)
 # PCA scores
-scores <- neg_pca$x %>%                   # Get PC coordinates
+scores <- neg_pca$x %>%                  # Get PC coordinates
   data.frame %>%                         # Convert to data frames
   mutate(Sample_ID = rownames(.)) %>%    # Create a new column with the sample names
   left_join(pheno_data )                 # Adding metadata
@@ -299,8 +299,8 @@ scores <- neg_pca$x %>%                   # Get PC coordinates
 ggplot(scores,
        aes(PC1, PC2, shape = Species, color = Species)) +
   geom_point(size = 3) +
-  guides(x=guide_axis(title = "PC1 (28.73 %)"),
-         y=guide_axis(title = "PC2 (18.10 %)")) +
+  guides(x=guide_axis(title = "PC1 (29.03 %)"),
+         y=guide_axis(title = "PC2 (18.43 %)")) +
   theme_classic()
 # Save plot
 ggsave("Result/LCMS/LCMS_PCA.png", width = 5, height = 4, device='png', dpi="print")
@@ -312,7 +312,7 @@ Plotting loading results.
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
 loadings <- neg_pca$rotation %>%           # Extract loadings
-  data.frame(Feature_ID = rownames(.))     # New column with feature name
+  data.frame(Cluster_ID = rownames(.))     # New column with feature name
 
 ```
 
@@ -321,29 +321,29 @@ Creating an artificial table with Feature name and Compound column.
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
 # Exporting notame output to find and filter identified metabolites
-#write_to_excel(imputed, "Result/LCMS/to_LCMS_Metabolites.xlsx")
+write_to_excel(clustered, "Result/LCMS/Clustered_features.xlsx")
 # Load a metabolite name table
-#metab_name <- readxl::read_excel("Data/LCMS_Metabolites.xlsx", 5)
+metab_name <- readxl::read_excel("Data/LCMS_Metabolites.xlsx", 1)
 # Creating a new small table of the annotated compounds
-#neg_compouds <- left_join(metab_name, loadings)
-# Metabolite identification label
-`Identification level` <- feat_data$Identification_level
+neg_compouds <- left_join(metab_name, loadings)
 # Plotting results
 ggplot(loadings, aes(PC1, PC2)) + 
   geom_point(alpha = 0.2) +
   theme_classic() + 
-  geom_point(data = loadings, aes(shape = `Identification level`, color = `Identification level`), size = 2) +
-  ggrepel::geom_label_repel(data = loadings,
-                            aes(label = feat_data$Metabolite_name),
+  geom_point(data = neg_compouds,
+             aes(shape = `Identification level`, color = `Identification level`),
+             size = 2) +
+  ggrepel::geom_label_repel(data = neg_compouds,
+                            aes(label = Metabolite_name),
                             box.padding = 0.8,
                             label.padding = 0.3,
                             label.r = 0.3,
                             cex = 3) +
-  guides(x=guide_axis(title = "PC1 (28.73 %)"),
-         y=guide_axis(title = "PC2 (18.10 %)")) +
+  guides(x=guide_axis(title = "PC1 (29.03 %)"),
+         y=guide_axis(title = "PC2 (18.43 %)")) +
   ggsci::scale_color_aaas()
 # Save plot
-ggsave('Result/LCMS/LCMS_Loadings.png', width = 5, height = 4, device='png', dpi="print")
+ggsave('Result/LCMS/LCMS_Loadings.png', width = 10, height = 6, device='png', dpi="print")
 
 ```
 
@@ -376,24 +376,26 @@ Extracting and loaded of identified metabolites abundance.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
 
-# Metabolite name table without internal standard
-#metab_name_hm <- readxl::read_excel("Data/GCMS_Metabolites.xlsx", 6)
-# Add identified metabolite to "notame" output
-#add_met <- join_fData(no_flag, metab_name_hm)
-# Extracting identified metabolite data
-raw_hm <- corrected_no_blank[!is.na(corrected_no_blank@featureData@data$Metabolite_name),]
-# Drop QC
-raw_hm <- drop_qcs(raw_hm)
-# Data imputation
-set.seed(201)
-raw_hm <- impute_simple(raw_hm, value = "half_min", na_limit = 0.8)
-raw_hm <- impute_rf(raw_hm, all_features = TRUE)
-# Extracting feature height table
-hm_height <- exprs(raw_hm)
-# Extracting sample information
-hm_pdata <- raw_hm@phenoData@data
-# Extracting feature information
-hm_fdata <- raw_hm@featureData@data
+# Exporting notame output to find and filter height of identified metabolites
+write_to_excel(no_flag, "Result/LCMS/no_flag_features.xlsx")
+# Metabolite name table
+metab_name_hm <- readxl::read_excel("Data/LCMS_Metabolite_HeatMap.xlsx", 2)
+# Logarithmic scale
+hm_scl <- metab_name_hm[, 6:9] %>% as.matrix %>% log10()
+rownames(hm_scl) <- metab_name_hm$Metabolite_name
+# Metabolite classification
+metab_class <- metab_name_hm %>% select(Superclass, Metabolite = Metabolite_name)
+# Metabolite class to HeatMap anotation
+met_class_annotation <-  metab_class %>% select(Superclass) %>% 
+  as.matrix()
+rownames(met_class_annotation) <- metab_class$Metabolite
+# Top information
+top_info <- data.frame(Species = c( rep("A. rigidum"),
+                                    rep("C. guianensis"),
+                                    rep("M. laevis"),
+                                    rep("P. sagotianum"))) 
+rownames(top_info) <- paste(top_info$Species, rep(c(1, 2, 3, 4)))
+top_info <- as.matrix(top_info)
 
 ```
 
@@ -401,20 +403,16 @@ Scaling, row and top heatmap anotation.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
 
-set.seed(1520)
-# Logarithmic scale
-hm_scl <- log10(hm_height)
-rownames(hm_scl) <- hm_fdata$Metabolite_name
-colnames(hm_scl) <- hm_pdata$Group
+set.seed(2024)
 # Metabolite class color
-cols_metclass <- c("Organic oxygen compounds" = "#800000FF",
-                   "Organic acids and derivatives" = "#8A9045FF",
-                   "Benzenoids" = "#FFA319FF",
+cols_metclass <- c("Benzenoids" = "#800000FF",
+                   "Organic oxygen compounds" = "#8A9045FF",
+                   "Lipids and lipid-like molecules" = "#FFA319FF",
                    "Phenylpropanoids and polyketides" = "#FF5A5A",
-                   "Lipids and lipid-like molecules" = "#155F83FF")
+                   "Organic acids and derivatives" = "#155F83FF")
 # Add row anotation to HeatMap
-hm_row_ann <- rowAnnotation(`Class` = hm_fdata$Superclass,
-                            col = list(`Class` = cols_metclass),
+hm_row_ann <- rowAnnotation(Metabolite = met_class_annotation,
+                            col = list(Metabolite = cols_metclass),
                             show_annotation_name = T,
                             show_legend=F)
 # Species color
@@ -423,7 +421,7 @@ cols_species <- c("A. rigidum" = "#e6550d",
                  "M. laevis" = "#33d2ff",
                  "P. sagotianum" = "#d957f8")
 # Add top anotation to HeatMap
-top_info_ann <- HeatmapAnnotation(`Species` = hm_pdata$Species,
+top_info_ann <- HeatmapAnnotation(`Species` = top_info,
                                   col = list(`Species` = cols_species),
                                   show_annotation_name = T,
                                   show_legend=F, 
@@ -461,11 +459,11 @@ lgd2 <- Legend(labels = gt_render(c("*A. rigidum*",
                                     "*M. laevis*",
                                     "*P. sagotianum*")),
                legend_gp = gpar(fill = cols_species),
-               title = "Plants species", ncol = 1)
+               title = "Plant species", ncol = 1)
 # Metabolite class Legend
-lgd3 <- Legend(labels = c(unique(hm_fdata$Superclass)),
+lgd3 <- Legend(labels = c(unique(metab_class$Superclass)),
                legend_gp = gpar(fill = cols_metclass), 
-               title = "Metabolite Class", ncol = 2)
+               title = "Metabolite superclass", ncol = 2)
 
 ```
 
@@ -473,7 +471,7 @@ ComplexHeatmap plot
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
 
-set.seed(1520)
+set.seed(2024)
 # Converting to ggplot
 gg_heatmap <- grid.grabExpr(draw(hm_plot))
 gg_heatmap <- ggpubr::as_ggplot(gg_heatmap)
@@ -488,7 +486,7 @@ gcms_hm <- plot_grid(gg_legend_fn,
 gcms_hm
 # Save heatmap plot
 ggsave(filename = "Result/LCMS/LCMS_Heatmap.jpeg", plot = gcms_hm,
-      width = 5, height = 3, units = "in", dpi = 300, scale = 1.7)
+      width = 5, height = 4, units = "in", dpi = 300, scale = 1.7)
 
 ```
 
