@@ -23,7 +23,7 @@ The workflow used was taken from ["notame": Workflow for Non-Targeted LC–MS Me
 
 ## Before to start
 
-The "notame" package accepts as input a feature table that can be obtained through software such as MZMine, MSDial, among others. In this case, the feature table was obtained with the help of MZmine. The (*.txt) file was fixed to obtain the final feature table input.
+The "notame" package accepts as input a feature table that can be obtained through software such as MZmine, MS-DIAL, among others. In this case, the feature table was obtained with the help of MZmine. The (*.csv) file was fixed to obtain the final feature table input.
 
 ## Notame workflow
 
@@ -114,7 +114,7 @@ mode <- mark_nas(mode, value = 0)
 
 ```
 
-Then, features with low detection rate are first flagged and then could be removed. The notame package employs two criteria to select this features. First, is the feature presence in a percentage of QC injections, and then the feature presence in a percentage within a sample group or class.
+Then, features with low detection rate are first flagged and then could be removed. The "notame" package employs two criteria to select this features. First, is the feature presence in a percentage of QC injections, and then the feature presence in a percentage within a sample group or class.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
 
@@ -130,7 +130,7 @@ visualizations(mode, prefix = paste0(ppath, "Figure/LCMS/", "Low_Detection"))
 
 ```
 
-With these values, features which that were not detected in the 75% of the QC injections and 0% of sample groups will be flagged as low detection rate.
+With these values, features which that were not detected in 75% of the QC injections will be flagged as low detection rate.
 
 The next step for preprocessing correspond to drift correction. The drift correction can be applied by smoothed cubic spline regression.
 
@@ -161,7 +161,7 @@ corr_pca + corr_bp
 
 ```
 
-Contaminant peaks based on the Process Blank will be removed.
+Contaminant peaks based on the process blank will be removed.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
 
@@ -183,7 +183,7 @@ visualizations(corrected_no_blank, prefix = paste0(ppath, "Figure/LCMS/", "No_Bl
 
 ```
 
-The next step is feature clustering. This step helps us reduce the number of features of the same molecule that were split due to ionization behavior.
+The next step is feature clustering. This step helps us reduce the number of features of the same molecule that were split due to ionization behavior (In-source fragmentation for example).
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
@@ -245,7 +245,7 @@ imp_pca + imp_bp
 
 ```
 
-Finally the data is ready to be exported and proceed with the statistical analysis.
+Finally, the data is ready to be exported and proceed with the statistical analysis.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
 
@@ -316,7 +316,7 @@ loadings <- neg_pca$rotation %>%           # Extract loadings
 
 ```
 
-Creating an artificial table with Feature name and Compound column.
+Creating an artificial table with feature ID and compound name column.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
@@ -376,7 +376,7 @@ Extracting and loaded of identified metabolites abundance.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
 
-# Exporting notame output to find and filter height of identified metabolites
+# Exporting "notame" output to find and filter height of identified metabolites
 write_to_excel(no_flag, "Result/LCMS/no_flag_features.xlsx")
 # Metabolite name table
 metab_name_hm <- readxl::read_excel("Data/LCMS_Metabolite_HeatMap.xlsx", 2)
@@ -497,6 +497,4 @@ Finish a record.
 finish_log()
 
 ```
-
-
 
