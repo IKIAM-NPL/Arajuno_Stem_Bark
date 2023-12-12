@@ -482,11 +482,11 @@ lgd2 <- Legend(labels = gt_render(c("*A. rigidum*",
                                     "*M. laevis*",
                                     "*P. sagotianum*")),
                legend_gp = gpar(fill = cols_species),
-               title = "Plants species", ncol = 1)
+               title = "Plant species", ncol = 2)
 # Metabolite class Legend
 lgd3 <- Legend(labels = c(unique(hm_fdata$Superclass)) ,
                legend_gp = gpar(fill = cols_metclass), 
-               title = "Metabolite Class", ncol = 1)
+               title = "Metabolite Superclass", ncol = 1)
 
 ```
 

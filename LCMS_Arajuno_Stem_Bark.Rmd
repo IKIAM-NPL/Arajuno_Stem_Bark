@@ -338,12 +338,12 @@ ggplot(loadings, aes(PC1, PC2)) +
                             box.padding = 0.8,
                             label.padding = 0.3,
                             label.r = 0.3,
-                            cex = 3) +
+                            cex = 3.7) +
   guides(x=guide_axis(title = "PC1 (29.03 %)"),
          y=guide_axis(title = "PC2 (18.43 %)")) +
   ggsci::scale_color_aaas()
 # Save plot
-ggsave('Result/LCMS/LCMS_Loadings.png', width = 10, height = 6, device='png', dpi="print")
+ggsave('Result/LCMS/LCMS_Loadings.png', width = 8, height = 5, device='png', dpi="print")
 
 ```
 
@@ -384,16 +384,16 @@ metab_name_hm <- readxl::read_excel("Data/LCMS_Metabolite_HeatMap.xlsx", 2)
 hm_scl <- metab_name_hm[, 6:9] %>% as.matrix %>% log10()
 rownames(hm_scl) <- metab_name_hm$Metabolite_name
 # Metabolite classification
-metab_class <- metab_name_hm %>% select(Superclass, Metabolite = Metabolite_name)
+metab_class <- metab_name_hm %>% select(Class = Superclass, Metabolite = Metabolite_name)
 # Metabolite class to HeatMap anotation
-met_class_annotation <-  metab_class %>% select(Superclass) %>% 
+met_class_annotation <-  metab_class %>% select(Class) %>% 
   as.matrix()
 rownames(met_class_annotation) <- metab_class$Metabolite
 # Top information
-top_info <- data.frame(Species = c( rep("A. rigidum"),
-                                    rep("C. guianensis"),
-                                    rep("M. laevis"),
-                                    rep("P. sagotianum"))) 
+top_info <- data.frame(Species = c( rep("Ps"),
+                                    rep("Cg"),
+                                    rep("Ml"),
+                                    rep("Ar"))) 
 rownames(top_info) <- paste(top_info$Species, rep(c(1, 2, 3, 4)))
 top_info <- as.matrix(top_info)
 
@@ -416,13 +416,13 @@ hm_row_ann <- rowAnnotation(Metabolite = met_class_annotation,
                             show_annotation_name = T,
                             show_legend=F)
 # Species color
-cols_species <- c("A. rigidum" = "#e6550d",
-                 "C. guianensis" = "#91cf60",
-                 "M. laevis" = "#33d2ff",
-                 "P. sagotianum" = "#d957f8")
+cols_species <- c("Ps" = "#d957f8",
+                 "Cg" = "#91cf60",
+                 "Ml" = "#33d2ff",
+                 "Ar" = "#e6550d")
 # Add top anotation to HeatMap
-top_info_ann <- HeatmapAnnotation(`Species` = top_info,
-                                  col = list(`Species` = cols_species),
+top_info_ann <- HeatmapAnnotation(Species = top_info,
+                                  col = list(Species = cols_species),
                                   show_annotation_name = T,
                                   show_legend=F, 
                                   border = TRUE)
@@ -454,14 +454,14 @@ lgd1 <- Legend(col_fun = mycol,
                at = seq(7),
                direction = "horizontal" )
 # Plants species legend
-lgd2 <- Legend(labels = gt_render(c("*A. rigidum*",
+lgd2 <- Legend(labels = gt_render(c("*P. sagotianum*",
                                     "*C. guianensis*",
                                     "*M. laevis*",
-                                    "*P. sagotianum*")),
+                                    "*A. rigidum*")),
                legend_gp = gpar(fill = cols_species),
                title = "Plant species", ncol = 1)
 # Metabolite class Legend
-lgd3 <- Legend(labels = c(unique(metab_class$Superclass)),
+lgd3 <- Legend(labels = c(unique(metab_class$Class)),
                legend_gp = gpar(fill = cols_metclass), 
                title = "Metabolite superclass", ncol = 2)
 

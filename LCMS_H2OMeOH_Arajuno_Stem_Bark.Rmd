@@ -330,7 +330,7 @@ ggplot(scores,
          y=guide_axis(title = "PC2 (15.55 %)")) +
   theme_classic()
 # Save plot
-ggsave("Result/LCMS/LCMS_H2OMeOH_PCA.png", width = 7, height = 4, device='png', dpi="print")
+ggsave("Result/LCMS/LCMS_H2OMeOH_PCA.png", width = 5, height = 4, device='png', dpi="print")
 
 ```
 
