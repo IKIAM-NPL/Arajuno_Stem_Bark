@@ -486,7 +486,7 @@ lgd2 <- Legend(labels = gt_render(c("*A. rigidum*",
 # Metabolite class Legend
 lgd3 <- Legend(labels = c(unique(hm_fdata$Superclass)) ,
                legend_gp = gpar(fill = cols_metclass), 
-               title = "Metabolite Superclass", ncol = 1)
+               title = "Metabolite superclass", ncol = 1)
 
 ```
 
@@ -509,7 +509,7 @@ gcms_hm <- plot_grid(gg_legend_fn,
 gcms_hm
 # Save heatmap plot
 ggsave(filename = "Result/GCMS/GCMS_Heatmap.jpeg", plot = gcms_hm,
-      width = 5, height = 3, units = "in", dpi = 300, scale = 1.7)
+      width = 5, height = 2, units = "in", dpi = 300, scale = 1.7)
 
 ```
 
