@@ -366,7 +366,7 @@ ggplot(loadings, aes(PC1, PC2)) +
                             box.padding = 0.8,
                             label.padding = 0.3,
                             label.r = 0.3,
-                            cex = 3) +
+                            cex = 3.7) +
   guides(x=guide_axis(title = "PC1 (45.52 %)"),
          y=guide_axis(title = "PC2 (23.63 %)")) +
   ggsci::scale_color_aaas()
