@@ -32,8 +32,8 @@ graphics obtained are included.
 
 - LC-(QTOF)
 
-![Heatmap of the annotated features in negative polarity](Result/LCMS/2nd_LCMS_PCA.png)
+![Heatmap of the annotated features in negative polarity](Result/LCMS/Firts_LCMS_Heatmap.jpeg)
 
 - GC-(Q)MS
 
-![Heatmap of the annotated features in GC-MS](Result/GCMS/GCMS_PCA.png)
+![Heatmap of the annotated features in GC-MS](Result/GCMS/GCMS_Heatmap.jpeg)
