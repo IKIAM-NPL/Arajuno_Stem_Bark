@@ -30,6 +30,9 @@ graphics obtained are included.
 
 ## Heatmaps and HCA
 
+Heatmap of the annotated features in LC-MS/MS and GC-MS. Where Ar = *A. rigidum*, Cg = 
+*C. guianensis*, Ml = *M. laevis* and Ps = *P.sagotianum*
+
 - LC-(QTOF)
 
 ![Heatmap of the annotated features in negative polarity](Result/LCMS/Firts_LCMS_Heatmap.jpeg)
