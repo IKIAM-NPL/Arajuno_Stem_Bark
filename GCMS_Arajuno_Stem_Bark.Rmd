@@ -353,7 +353,7 @@ Creating an artificial table with Feature name and Compound column.
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
 # Load a metabolite name table
-metab_name <- readxl::read_excel("Data/GCMS_Metabolites.xlsx", 5)
+metab_name <- readxl::read_excel("Data/GCMS_Metabolites.xlsx", 6)
 # Creating a new small table of the annotated compounds
 ei_compouds <- left_join(metab_name, loadings)
 # Plotting results
