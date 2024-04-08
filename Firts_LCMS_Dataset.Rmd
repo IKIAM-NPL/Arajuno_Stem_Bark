@@ -48,7 +48,7 @@ Then, a main path and a log system was added to have a record of each process ex
 ```{r echo=TRUE, message=TRUE, warning=FALSE, error=FALSE}
 
 # Main path
-ppath <- "F:/Jefferson-Pastuna/Arajuno_Stem_Bark/"
+ppath <- "../Arajuno_Stem_Bark/"
 # Log system
 init_log(log_file = paste0(ppath, "Result/LCMS/LCMS_log.txt"))
 
@@ -126,7 +126,7 @@ mode <- flag_detection(mode, qc_limit = 3/4, group_limit = 0)
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
 # Some statistics after low detection algorithm
-visualizations(mode, prefix = paste0(ppath, "Figure/LCMS/", "Low_Detection"))
+#visualizations(mode, prefix = paste0(ppath, "Figure/LCMS/", "Low_Detection"))
 
 ```
 
@@ -179,7 +179,7 @@ corrected_no_blank <- corrected_no_blank[, corrected_no_blank$Group != "PB"]
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
 # Some statistics after feature blank detection algorithm
-visualizations(corrected_no_blank, prefix = paste0(ppath, "Figure/LCMS/", "No_Blank"))
+#visualizations(corrected_no_blank, prefix = paste0(ppath, "Figure/LCMS/", "No_Blank"))
 
 ```
 
@@ -249,7 +249,7 @@ Finally, the data is ready to be exported and proceed with the statistical analy
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
 
-save(imputed, file = paste0(ppath, "Result/LCMS/First_LCMS_output.RData"))
+#save(imputed, file = paste0(ppath, "Result/LCMS/First_LCMS_output.RData"))
 
 ```
 
@@ -303,7 +303,7 @@ ggplot(scores,
          y=guide_axis(title = "PC2 (18.43 %)")) +
   theme_classic()
 # Save plot
-ggsave("Result/LCMS/Firts_LCMS_PCA.png", width = 5, height = 4, device='png', dpi="print")
+#ggsave("Result/LCMS/Firts_LCMS_PCA.png", width = 5, height = 4, device='png', dpi="print")
 
 ```
 
@@ -343,7 +343,7 @@ ggplot(loadings, aes(PC1, PC2)) +
          y=guide_axis(title = "PC2 (18.43 %)")) +
   ggsci::scale_color_aaas()
 # Save plot
-ggsave('Result/LCMS/Firts_LCMS_Loadings.png', width = 8, height = 5, device='png', dpi="print")
+#ggsave('Result/LCMS/Firts_LCMS_Loadings.png', width = 8, height = 5, device='png', dpi="print")
 
 ```
 
@@ -393,7 +393,7 @@ rownames(met_class_annotation) <- metab_class$Metabolite
 top_info <- data.frame(Species = c( rep("Ps"),
                                     rep("Cg"),
                                     rep("Ml"),
-                                    rep("Ar"))) 
+                                    rep("Ar")))
 rownames(top_info) <- paste(top_info$Species, rep(c(1, 2, 3, 4)))
 top_info <- as.matrix(top_info)
 
@@ -438,6 +438,7 @@ hm_plot <- Heatmap(hm_scl,
         clustering_method_columns = "complete",
         top_annotation = top_info_ann,
         right_annotation = hm_row_ann,
+        column_names_gp = gpar(fontface = "italic"),
         show_heatmap_legend = F,
         row_km = 3, column_km = 2)
 hm_plot
@@ -485,8 +486,8 @@ gcms_hm <- plot_grid(gg_legend_fn,
           rel_heights = c(0.857, 4))
 gcms_hm
 # Save heatmap plot
-ggsave(filename = "Result/LCMS/Firts_LCMS_Heatmap.jpeg", plot = gcms_hm,
-      width = 5, height = 4, units = "in", dpi = 300, scale = 1.7)
+#ggsave(filename = "Result/LCMS/Firts_LCMS_Heatmap_to_DQ.pdf", plot = gcms_hm,
+#      width = 5, height = 4, units = "in", dpi = 300, scale = 1.7)
 
 ```
 
