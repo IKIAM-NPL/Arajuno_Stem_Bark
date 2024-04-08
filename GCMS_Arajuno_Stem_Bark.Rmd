@@ -54,7 +54,7 @@ library(notame)
 ```{r echo=TRUE, message=TRUE, warning=FALSE, error=FALSE}
 
 # Main path
-ppath <- "C:/Users/F4ss0/Documents/Ikiam21062022/Arajuno_Stem_Bark/"
+ppath <- "../Arajuno_Stem_Bark/"
 # Log system
 init_log(log_file = paste0(ppath, "Result/GCMS/GCMS_log.txt"))
 
@@ -460,6 +460,7 @@ hm_plot <- Heatmap(hm_scl,
         clustering_distance_columns = "euclidean",
         clustering_method_columns = "complete",
         top_annotation = top_info_ann,
+        column_names_gp = gpar(fontface = "italic"),
         #right_annotation = hm_row_ann,
         show_heatmap_legend = F,
         row_km = 3, column_km = 2)
@@ -508,7 +509,7 @@ gcms_hm <- plot_grid(gg_legend_fn,
           rel_heights = c(0.195, 0.88))
 gcms_hm
 # Save heatmap plot
-ggsave(filename = "Result/GCMS/GCMS_Heatmap_to_DQ.jpeg", plot = gcms_hm,
+ggsave(filename = "Result/GCMS/GCMS_Heatmap_to_DQ.pdf", plot = gcms_hm,
       width = 5, height = 3, units = "in", dpi = 300, scale = 1.7)
 
 ```
