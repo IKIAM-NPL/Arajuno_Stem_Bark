@@ -38,7 +38,7 @@ As a first step for the analysis,"notame" package and other dependency packages 
 #devtools::install_github("antonvsdata/notame")
 
 # Dependency packages installation
-#install_dependencies
+install_dependencies
 
 ```
 
@@ -54,7 +54,7 @@ library(notame)
 ```{r echo=TRUE, message=TRUE, warning=FALSE, error=FALSE}
 
 # Main path
-ppath <- "F:/Jefferson-Pastuna/Arajuno_Stem_Bark/"
+ppath <- "C:/Users/F4ss0/Documents/Ikiam21062022/Arajuno_Stem_Bark/"
 # Log system
 init_log(log_file = paste0(ppath, "Result/GCMS/GCMS_log.txt"))
 
@@ -132,7 +132,7 @@ mode <- flag_detection(mode, qc_limit = 0.80, group_limit = 0.75)
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
 # Some statistics after low detection algorithm
-visualizations(mode, prefix = paste0(ppath, "Figure/GCMS/", "Low_Detection"))
+#visualizations(mode, prefix = paste0(ppath, "Figure/GCMS/", "Low_Detection"))
 
 ```
 
@@ -187,7 +187,7 @@ corrected_no_blank <- corrected_no_blank[, corrected_no_blank$Group != "Blank"]
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
 
 # Some statistics after low detection algorithm
-visualizations(corrected_no_blank, prefix = paste0(ppath, "Figure/GCMS/", "No_Blank"))
+#visualizations(corrected_no_blank, prefix = paste0(ppath, "Figure/GCMS/", "No_Blank"))
 
 ```
 
@@ -225,9 +225,9 @@ clustered <- cluster_features(corrected_no_qc,
                               rt_window = 1/600,
                               all_features = TRUE,
                               corr_thresh = 0.95,
-                              d_thresh = 0.8,
-                              plotting = TRUE,
-                              prefix = paste0(ppath, "Cluster/GCMS/GCMS_Cluster"))
+                              d_thresh = 0.8)#,
+                              #plotting = TRUE,
+                              #prefix = paste0(ppath, "Cluster/GCMS/GCMS_Cluster"))
 compressed <- compress_clusters(clustered)
 
 ```
@@ -284,7 +284,7 @@ Finally the data is ready to be exported and proceed with the statistical analys
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE}
 
-save(imputed, file = paste0(ppath, "Result/GCMS/Notame_GCMS_output.RData"))
+#save(imputed, file = paste0(ppath, "Result/GCMS/Notame_GCMS_output.RData"))
 
 ```
 
@@ -335,7 +335,7 @@ ggplot(scores,
          y=guide_axis(title = "PC2 (23.63 %)")) +
   theme_classic()
 # Save plot
-ggsave('Result/GCMS/GCMS_PCA.png', width = 5, height = 4, device='png', dpi="print")
+#ggsave('Result/GCMS/GCMS_PCA.png', width = 5, height = 4, device='png', dpi="print")
 
 ```
 
@@ -427,7 +427,7 @@ set.seed(1540)
 # Logarithmic scale
 hm_scl <- log10(hm_height)
 rownames(hm_scl) <- hm_fdata$Metabolite_name
-colnames(hm_scl) <- hm_pdata$Group
+colnames(hm_scl) <- hm_pdata$Species
 # Metabolite class color
 cols_metclass <- c("Benzenoids" = "#800000FF",
                    "Organoheterocyclic compounds" = "#8A9045FF",
@@ -460,7 +460,7 @@ hm_plot <- Heatmap(hm_scl,
         clustering_distance_columns = "euclidean",
         clustering_method_columns = "complete",
         top_annotation = top_info_ann,
-        right_annotation = hm_row_ann,
+        #right_annotation = hm_row_ann,
         show_heatmap_legend = F,
         row_km = 3, column_km = 2)
 hm_plot
@@ -482,11 +482,11 @@ lgd2 <- Legend(labels = gt_render(c("*A. rigidum*",
                                     "*M. laevis*",
                                     "*P. sagotianum*")),
                legend_gp = gpar(fill = cols_species),
-               title = "Plant species", ncol = 2)
+               title = "Plant species", ncol = 4)
 # Metabolite class Legend
-lgd3 <- Legend(labels = c(unique(hm_fdata$Superclass)) ,
-               legend_gp = gpar(fill = cols_metclass), 
-               title = "Metabolite superclass", ncol = 1)
+#lgd3 <- Legend(labels = c(unique(hm_fdata$Superclass)) ,
+#               legend_gp = gpar(fill = cols_metclass), 
+#               title = "Metabolite superclass", ncol = 1)
 
 ```
 
@@ -499,7 +499,7 @@ set.seed(1540)
 gg_heatmap <- grid.grabExpr(draw(hm_plot))
 gg_heatmap <- ggpubr::as_ggplot(gg_heatmap)
 # Legends
-all_legends <- packLegend(lgd1, lgd2, lgd3, direction = "horizontal")
+all_legends <- packLegend(lgd1, lgd2, direction = "horizontal")
 gg_legend <- grid.grabExpr(draw(all_legends))
 gg_legend_fn <- ggpubr::as_ggplot(gg_legend)
 # Heatmap plot
@@ -508,8 +508,8 @@ gcms_hm <- plot_grid(gg_legend_fn,
           rel_heights = c(0.195, 0.88))
 gcms_hm
 # Save heatmap plot
-ggsave(filename = "Result/GCMS/GCMS_Heatmap.jpeg", plot = gcms_hm,
-      width = 5, height = 2, units = "in", dpi = 300, scale = 1.7)
+ggsave(filename = "Result/GCMS/GCMS_Heatmap_to_DQ.jpeg", plot = gcms_hm,
+      width = 5, height = 3, units = "in", dpi = 300, scale = 1.7)
 
 ```
 
