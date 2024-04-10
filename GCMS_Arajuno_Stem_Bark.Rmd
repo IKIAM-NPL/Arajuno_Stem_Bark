@@ -37,19 +37,15 @@ As a first step for the analysis,"notame" package and other dependency packages 
 #}
 #devtools::install_github("antonvsdata/notame")
 
+# Notame library call
+library(notame)
+
 # Dependency packages installation
 install_dependencies
 
 ```
 
 Then, a main path and a log system was added to have a record of each process executed.
-
-```{r echo=TRUE, message=TRUE, warning=FALSE, error=FALSE, results='hide'}
-
-# Notame library call
-library(notame)
-
-```
 
 ```{r echo=TRUE, message=TRUE, warning=FALSE, error=FALSE}
 
@@ -333,9 +329,15 @@ ggplot(scores,
   geom_point(size = 3) +
   guides(x=guide_axis(title = "PC1 (45.52 %)"),
          y=guide_axis(title = "PC2 (23.63 %)")) +
-  theme_classic()
+  theme_classic() +
+  theme(legend.position = c(0.84, 0.79),
+        legend.background = element_rect(fill = "white", color = "black")) +
+  theme(panel.grid = element_blank(), 
+        panel.border = element_rect(fill= "transparent")) +
+  geom_vline(xintercept = 0, linetype = "longdash", colour="gray") +
+  geom_hline(yintercept = 0, linetype = "longdash", colour="gray")
 # Save plot
-#ggsave('Result/GCMS/GCMS_PCA.png', width = 5, height = 4, device='png', dpi="print")
+#ggsave('Result/GCMS/GCMS_PCA_To_DQ.pdf', width = 5, height = 4, device='pdf', dpi="print")
 
 ```
 
@@ -371,7 +373,7 @@ ggplot(loadings, aes(PC1, PC2)) +
          y=guide_axis(title = "PC2 (23.63 %)")) +
   ggsci::scale_color_aaas()
 # Save plot
-ggsave('Result/GCMS/GCMS_Loadings.png', width = 5, height = 4, device='png', dpi="print")
+#ggsave('Result/GCMS/GCMS_Loadings.png', width = 5, height = 4, device='png', dpi="print")
 
 ```
 
@@ -509,8 +511,8 @@ gcms_hm <- plot_grid(gg_legend_fn,
           rel_heights = c(0.195, 0.88))
 gcms_hm
 # Save heatmap plot
-ggsave(filename = "Result/GCMS/GCMS_Heatmap_to_DQ.pdf", plot = gcms_hm,
-      width = 5, height = 3, units = "in", dpi = 300, scale = 1.7)
+#ggsave(filename = "Result/GCMS/GCMS_Heatmap_to_DQ.pdf", plot = gcms_hm,
+      #width = 5, height = 3, units = "in", dpi = 300, scale = 1.7)
 
 ```
 
