@@ -338,12 +338,18 @@ ggplot(loadings, aes(PC1, PC2)) +
                             box.padding = 0.8,
                             label.padding = 0.3,
                             label.r = 0.3,
-                            cex = 3.7) +
+                            cex = 3) +
   guides(x=guide_axis(title = "PC1 (29.03 %)"),
          y=guide_axis(title = "PC2 (18.43 %)")) +
-  ggsci::scale_color_aaas()
+  ggsci::scale_color_aaas() +
+  theme(legend.position = c(0.895, 0.15),
+        legend.background = element_rect(fill = "white", color = "black")) +
+  theme(panel.grid = element_blank(), 
+        panel.border = element_rect(fill= "transparent")) +
+  geom_vline(xintercept = 0, linetype = "longdash", colour="gray") +
+  geom_hline(yintercept = 0, linetype = "longdash", colour="gray")
 # Save plot
-#ggsave('Result/LCMS/Firts_LCMS_Loadings.png', width = 8, height = 5, device='png', dpi="print")
+#ggsave('Result/LCMS/Firts_LCMS_Loadings_to_DQ.pdf', width = 8, height = 4, device='pdf', dpi="print")
 
 ```
 
