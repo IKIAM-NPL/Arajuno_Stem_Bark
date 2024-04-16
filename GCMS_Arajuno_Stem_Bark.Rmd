@@ -458,6 +458,7 @@ top_info_ann <- HeatmapAnnotation(`Species` = hm_pdata$Species,
 # Color scale
 mycol <- colorRamp2(c(1.5, 2.75, 4),
                     c("blue", "white", "red"))
+split = sample(letters[1:3], 4, replace = T)
 # Heatmap matrix plotting
 hm_plot <- Heatmap(hm_scl,
         col = mycol,
@@ -469,7 +470,9 @@ hm_plot <- Heatmap(hm_scl,
         column_names_gp = gpar(fontface = "italic"),
         #right_annotation = hm_row_ann,
         show_heatmap_legend = F,
-        row_km = 3, column_km = 2)
+        row_split = split,
+        #row_km = 3,
+        column_km = 2)
 hm_plot
 
 ```
@@ -515,7 +518,7 @@ gcms_hm <- plot_grid(gg_legend_fn,
           rel_heights = c(0.195, 0.88))
 gcms_hm
 # Save heatmap plot
-#ggsave(filename = "Result/GCMS/GCMS_Heatmap_to_DQ.pdf", plot = gcms_hm,
+#ggsave(filename = "Result/GCMS/GCMS_Heatmap_to_DQ2.pdf", plot = gcms_hm,
       #width = 5, height = 3, units = "in", dpi = 300, scale = 1.7)
 
 ```
