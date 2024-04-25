@@ -18,25 +18,12 @@ graphics obtained are included.
 
 # Useful results
 
-## PCA analysis
+## PCA, Heatmaps and HCA analysis
 
 - LC-(QTOF)
 
-![PCA analysis for negative polarity](Result/LCMS/2nd_LCMS_PCA.png)
+![PCA analysis for negative polarity](Result/LCMS/Figure_1.png)
 
 - GC-(Q)MS
 
-![PCA analysis of the volatile metabolome](Result/GCMS/GCMS_PCA.png)
-
-## Heatmaps and HCA
-
-Heatmap of the annotated features in LC-MS/MS and GC-MS. Where Ar = *A. rigidum*, Cg = 
-*C. guianensis*, Ml = *M. laevis* and Ps = *P.sagotianum*
-
-- LC-(QTOF)
-
-![Heatmap of the annotated features in negative polarity](Result/LCMS/Firts_LCMS_Heatmap.jpeg)
-
-- GC-(Q)MS
-
-![Heatmap of the annotated features in GC-MS](Result/GCMS/GCMS_Heatmap.jpeg)
+![PCA analysis of the volatile metabolome](Result/GCMS/Figure_2.png)
