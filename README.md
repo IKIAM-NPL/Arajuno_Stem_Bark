@@ -26,4 +26,4 @@ graphics obtained are included.
 
 - GC-(Q)MS
 
-![PCA analysis of the volatile metabolome](Result/GCMS/Figure_2.jpg)
+![PCA analysis of the volatile metabolome](https://github.com/IKIAM-NPL/Arajuno_Stem_Bark/blob/main/Result/GCMS/Figure_2.jpg)
