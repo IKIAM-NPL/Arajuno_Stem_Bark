@@ -518,11 +518,14 @@ figure_one <- ggpubr::as_ggplot(Figure_1) +
                   x = c(0, 0.5, 0),
                   y = c(.99, .99, .475))
 # (*.pdf) file
-ggsave(filename = "Result/LCMS/Figure_1.pdf", plot = figure_one,
-      width = 130, height = 130, units = "mm", dpi = 300, scale = 2.5)
+#ggsave(filename = "Result/LCMS/Figure_1.pdf", plot = figure_one,
+#      width = 130, height = 130, units = "mm", dpi = 300, scale = 2.5)
 # (*.png) file
-ggsave(filename = "Result/LCMS/Figure_1.png", plot = figure_one,
-      width = 130, height = 130, units = "mm", dpi = 300, scale = 2.5)
+#ggsave(filename = "Result/LCMS/Figure_1.png", plot = figure_one,
+#      width = 130, height = 130, units = "mm", dpi = 300, scale = 2.5)
+# (*.jpg) file
+#ggsave(filename = "Result/LCMS/Figure_1.jpg", plot = figure_one,
+#      width = 130, height = 130, units = "mm", dpi = 300, scale = 2.5)
 
 ```
 

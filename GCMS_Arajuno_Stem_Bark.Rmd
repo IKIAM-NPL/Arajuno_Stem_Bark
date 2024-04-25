@@ -548,6 +548,9 @@ figure_two <- ggpubr::as_ggplot(Figure_2) +
 # (*.png) file
 #ggsave(filename = "Result/GCMS/Figure_2.png", plot = figure_two,
 #      width = 116, height = 90, units = "mm", dpi = 300, scale = 2.5)
+# (*.jpg) file
+#ggsave(filename = "Result/GCMS/Figure_2.jpg", plot = figure_two,
+#      width = 116, height = 90, units = "mm", dpi = 300, scale = 2.5)
 
 ```
 
