@@ -324,18 +324,20 @@ scores <- ei_pca$x %>%                   # Get PC coordinates
   mutate(Sample_ID = rownames(.)) %>%    # Create a new column with the sample names
   left_join(pheno_data )                 # Adding metadata
 # PCA plot
-ggplot(scores,
-       aes(PC1, PC2, shape = Species, color = Species)) +
+figure_2a <- ggplot(scores,
+                    aes(PC1, PC2, shape = Species, color = Species)) +
   geom_point(size = 3) +
   guides(x=guide_axis(title = "PC1 (45.52 %)"),
          y=guide_axis(title = "PC2 (23.63 %)")) +
   theme_classic() +
+  theme(legend.text = element_text(face="italic"))+
   theme(legend.position = c(0.84, 0.79),
         legend.background = element_rect(fill = "white", color = "black")) +
   theme(panel.grid = element_blank(), 
         panel.border = element_rect(fill= "transparent")) +
   geom_vline(xintercept = 0, linetype = "longdash", colour="gray") +
   geom_hline(yintercept = 0, linetype = "longdash", colour="gray")
+figure_2a
 # Save plot
 #ggsave('Result/GCMS/GCMS_PCA_To_DQ.pdf', width = 5, height = 4, device='pdf', dpi="print")
 
@@ -359,9 +361,9 @@ metab_name <- readxl::read_excel("Data/GCMS_Metabolites.xlsx", 6)
 # Creating a new small table of the annotated compounds
 ei_compouds <- left_join(metab_name, loadings)
 # Plotting results
-ggplot(loadings, aes(PC1, PC2)) + 
+figure_2b <- ggplot(loadings, aes(PC1, PC2)) +
   geom_point(alpha = 0.2) +
-  theme_classic() + 
+  theme_classic() +
   geom_point(data = ei_compouds, size = 1) +
   ggrepel::geom_label_repel(data = ei_compouds,
                             aes(label = Metabolite_name),
@@ -376,8 +378,9 @@ ggplot(loadings, aes(PC1, PC2)) +
   geom_vline(xintercept = 0, linetype = "longdash", colour="gray") +
   geom_hline(yintercept = 0, linetype = "longdash", colour="gray") +
   ggsci::scale_color_aaas()
+figure_2b
 # Save plot
-ggsave('Result/GCMS/GCMS_Loadings_to_DQ.pdf', width = 5, height = 4, device='pdf', dpi="print")
+#ggsave('Result/GCMS/GCMS_Loadings_to_DQ.pdf', width = 5, height = 4, device='pdf', dpi="print")
 
 ```
 
@@ -458,7 +461,7 @@ top_info_ann <- HeatmapAnnotation(`Species` = hm_pdata$Species,
 # Color scale
 mycol <- colorRamp2(c(1.5, 2.75, 4),
                     c("blue", "white", "red"))
-split = sample(letters[1:3], 4, replace = T)
+#split = sample(letters[1:3], 4, replace = T)
 # Heatmap matrix plotting
 hm_plot <- Heatmap(hm_scl,
         col = mycol,
@@ -470,8 +473,8 @@ hm_plot <- Heatmap(hm_scl,
         column_names_gp = gpar(fontface = "italic"),
         #right_annotation = hm_row_ann,
         show_heatmap_legend = F,
-        row_split = split,
-        #row_km = 3,
+        #row_split = split,
+        row_km = 3,
         column_km = 2)
 hm_plot
 
@@ -513,13 +516,38 @@ all_legends <- packLegend(lgd1, lgd2, direction = "horizontal")
 gg_legend <- grid.grabExpr(draw(all_legends))
 gg_legend_fn <- ggpubr::as_ggplot(gg_legend)
 # Heatmap plot
-gcms_hm <- plot_grid(gg_legend_fn,
+figure_2c <- plot_grid(gg_legend_fn,
           gg_heatmap, ncol = 1,
           rel_heights = c(0.195, 0.88))
-gcms_hm
+figure_2c
 # Save heatmap plot
 #ggsave(filename = "Result/GCMS/GCMS_Heatmap_to_DQ2.pdf", plot = gcms_hm,
       #width = 5, height = 3, units = "in", dpi = 300, scale = 1.7)
+
+```
+
+# Exporting plot
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
+
+library(gridExtra)
+
+Figure_2 <- arrangeGrob(figure_2a,
+                       figure_2b,
+                       figure_2c,
+                      layout_matrix = rbind(c(1, 2),
+                                            c(3, 3)))
+
+figure_two <- ggpubr::as_ggplot(Figure_2) +
+  draw_plot_label(label = LETTERS[1:3],
+                  x = c(0, 0.5, 0),
+                  y = c(.99, .99, .483))
+# (*.pdf) file
+#ggsave(filename = "Result/GCMS/Figure_2.pdf", plot = figure_two,
+#      width = 116, height = 90, units = "mm", dpi = 300, scale = 2.5)
+# (*.png) file
+#ggsave(filename = "Result/GCMS/Figure_2.png", plot = figure_two,
+#      width = 116, height = 90, units = "mm", dpi = 300, scale = 2.5)
 
 ```
 

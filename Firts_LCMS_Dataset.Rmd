@@ -50,7 +50,7 @@ Then, a main path and a log system was added to have a record of each process ex
 # Main path
 ppath <- "../Arajuno_Stem_Bark/"
 # Log system
-init_log(log_file = paste0(ppath, "Result/LCMS/LCMS_log.txt"))
+init_log(log_file = paste0(ppath, "Result/LCMS/Firts_LCMS_Dataset_log.txt"))
 
 ```
 
@@ -327,9 +327,9 @@ metab_name <- readxl::read_excel("Data/Firts_LCMS_Metabolites.xlsx", 1)
 # Creating a new small table of the annotated compounds
 neg_compouds <- left_join(metab_name, loadings)
 # Plotting results
-ggplot(loadings, aes(PC1, PC2)) + 
+figure_1b <- ggplot(loadings, aes(PC1, PC2)) +
   geom_point(alpha = 0.2) +
-  theme_classic() + 
+  theme_classic() +
   geom_point(data = neg_compouds,
              aes(shape = `Identification level`, color = `Identification level`),
              size = 2) +
@@ -342,12 +342,13 @@ ggplot(loadings, aes(PC1, PC2)) +
   guides(x=guide_axis(title = "PC1 (29.03 %)"),
          y=guide_axis(title = "PC2 (18.43 %)")) +
   ggsci::scale_color_aaas() +
-  theme(legend.position = c(0.895, 0.15),
+  theme(legend.position = c(0.865, 0.09),
         legend.background = element_rect(fill = "white", color = "black")) +
   theme(panel.grid = element_blank(), 
         panel.border = element_rect(fill= "transparent")) +
   geom_vline(xintercept = 0, linetype = "longdash", colour="gray") +
   geom_hline(yintercept = 0, linetype = "longdash", colour="gray")
+figure_1b
 # Save plot
 #ggsave('Result/LCMS/Firts_LCMS_Loadings_to_DQ.pdf', width = 8, height = 4, device='pdf', dpi="print")
 
@@ -435,7 +436,7 @@ top_info_ann <- HeatmapAnnotation(Species = top_info,
 # Color scale
 mycol <- colorRamp2(c(3, 5, 7),
                     c("blue", "white", "red"))
-split = sample(letters[1:3], 15, replace = T)
+#split = sample(letters[1:3], 15, replace = T)
 # Heatmap matrix plotting
 hm_plot <- Heatmap(hm_scl,
         col = mycol,
@@ -447,8 +448,8 @@ hm_plot <- Heatmap(hm_scl,
         right_annotation = hm_row_ann,
         column_names_gp = gpar(fontface = "italic"),
         show_heatmap_legend = F,
-        row_split = split,
-        #row_km = 3,
+        #row_split = split,
+        row_km = 3,
         column_km = 2)
 hm_plot
 
@@ -469,11 +470,11 @@ lgd2 <- Legend(labels = gt_render(c("*P. sagotianum*",
                                     "*M. laevis*",
                                     "*A. rigidum*")),
                legend_gp = gpar(fill = cols_species),
-               title = "Plant species", ncol = 1)
+               title = "Plant species", ncol = 2)
 # Metabolite class Legend
 lgd3 <- Legend(labels = c(unique(metab_class$Class)),
                legend_gp = gpar(fill = cols_metclass), 
-               title = "Metabolite superclass", ncol = 2)
+               title = "Metabolite superclass", ncol = 3)
 
 ```
 
@@ -490,13 +491,38 @@ all_legends <- packLegend(lgd1, lgd2, lgd3, direction = "horizontal")
 gg_legend <- grid.grabExpr(draw(all_legends))
 gg_legend_fn <- ggpubr::as_ggplot(gg_legend)
 # Heatmap plot
-gcms_hm <- plot_grid(gg_legend_fn,
+figure_1c <- plot_grid(gg_legend_fn,
           gg_heatmap, ncol = 1,
           rel_heights = c(0.857, 4))
-gcms_hm
+figure_1c
 # Save heatmap plot
 #ggsave(filename = "Result/LCMS/Firts_LCMS_Heatmap_to_DQ2.pdf", plot = gcms_hm,
       #width = 5, height = 4, units = "in", dpi = 300, scale = 1.7)
+
+```
+
+# Exporting plot
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, results='hide'}
+
+library(gridExtra)
+
+Figure_1 <- arrangeGrob(figure_1a,
+                       figure_1b,
+                       figure_1c,
+                      layout_matrix = rbind(c(1, 2),
+                                            c(3, 3)))
+
+figure_one <- ggpubr::as_ggplot(Figure_1) +
+  draw_plot_label(label = LETTERS[1:3],
+                  x = c(0, 0.5, 0),
+                  y = c(.99, .99, .475))
+# (*.pdf) file
+ggsave(filename = "Result/LCMS/Figure_1.pdf", plot = figure_one,
+      width = 130, height = 130, units = "mm", dpi = 300, scale = 2.5)
+# (*.png) file
+ggsave(filename = "Result/LCMS/Figure_1.png", plot = figure_one,
+      width = 130, height = 130, units = "mm", dpi = 300, scale = 2.5)
 
 ```
 
