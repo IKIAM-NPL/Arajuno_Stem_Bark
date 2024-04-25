@@ -22,8 +22,8 @@ graphics obtained are included.
 
 - LC-(QTOF)
 
-![PCA analysis for negative polarity](Result/LCMS/Figure_1.png)
+![PCA analysis for negative polarity](Result/LCMS/Figure_1.jpg)
 
 - GC-(Q)MS
 
-![PCA analysis of the volatile metabolome](Result/GCMS/Figure_2.png)
+![PCA analysis of the volatile metabolome](Result/GCMS/Figure_2.jpg)
