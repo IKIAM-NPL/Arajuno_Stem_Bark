@@ -508,13 +508,13 @@ figure_1c
 
 library(gridExtra)
 
-Figure_1 <- arrangeGrob(figure_1a,
-                       figure_1b,
-                       figure_1c,
-                      layout_matrix = rbind(c(1, 2),
-                                            c(3, 3)))
+Figure_11 <- arrangeGrob(figure_1a,
+                         figure_1b,
+                         figure_1c,
+                         layout_matrix = rbind(c(1, 2),
+                                               c(3, 3)))
 
-figure_one <- ggpubr::as_ggplot(Figure_1) +
+figure_oneone <- ggpubr::as_ggplot(Figure_11) +
   draw_plot_label(label = LETTERS[1:3],
                   x = c(0, 0.5, 0),
                   y = c(.99, .99, .475))
@@ -525,8 +525,8 @@ figure_one <- ggpubr::as_ggplot(Figure_1) +
 #ggsave(filename = "Result/LCMS/Figure_1.png", plot = figure_one,
 #      width = 130, height = 130, units = "mm", dpi = 300, scale = 2.5)
 # (*.jpg) file
-#ggsave(filename = "Result/LCMS/Figure_1.jpg", plot = figure_one,
-#      width = 130, height = 130, units = "mm", dpi = 300, scale = 2.5)
+ggsave(filename = "Result/LCMS/Figure_1.jpg", plot = figure_oneone,
+      width = 140, height = 130, units = "mm", dpi = 300, scale = 2.5)
 
 ```
 
