@@ -18,14 +18,14 @@ figure_one <- ggpubr::as_ggplot(Figure_1) +
                   x = c(0, 0.5, 0, 0.5, 0, 0.5),
                   y = c(.99, .99, .790, .790, .350, .350))
 # (*.pdf) file
-ggsave(filename = "PCA_Journal_Plot/Figure_1_PCA_Journal.pdf",
+ggsave(filename = "PCA_Journal_Plot/Figure_1_PCA_Journal_new.pdf",
        plot = figure_one, width = 150, height = 180,
        units = "mm", dpi = 300, scale = 2.5)
 # (*.png) file
-ggsave(filename = "PCA_Journal_Plot/Figure_1_PCA_Journal.png",
+ggsave(filename = "PCA_Journal_Plot/Figure_1_PCA_Journal_new.png",
        plot = figure_one, width = 150, height = 180,
        units = "mm", dpi = 300, scale = 2.5)
 # (*.jpg) file
-ggsave(filename = "PCA_Journal_Plot/Figure_1_PCA_Journal.jpg",
+ggsave(filename = "PCA_Journal_Plot/Figure_1_PCA_Journal_new.jpg",
        plot = figure_one, width = 150, height = 180,
        units = "mm", dpi = 300, scale = 2.5)
